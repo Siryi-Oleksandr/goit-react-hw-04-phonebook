@@ -5,6 +5,7 @@ import { Container } from './App.styled';
 import ContactForm from 'components/ContactForm';
 import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
+import TestForm from 'components/TestForm/TestForm';
 
 const LS_KEY = 'contacts';
 
@@ -91,6 +92,9 @@ class App extends Component {
           onEditContact={this.editContact}
         />
         <GlobalStyle />
+
+        {/* test form */}
+        <TestForm onAddContact={this.addContact} />
       </Container>
     );
   }
