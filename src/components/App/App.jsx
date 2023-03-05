@@ -6,6 +6,7 @@ import ContactForm from 'components/ContactForm';
 import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
 import TestForm from 'components/TestForm/TestForm';
+import toast, { Toaster } from 'react-hot-toast';
 
 const LS_KEY = 'contacts';
 
@@ -33,7 +34,7 @@ class App extends Component {
       ({ name }) => name === newName
     );
     if (isNotUnique) {
-      return alert(`${newName} is already in contacts.`);
+      return toast.success(`${newName} is already in contacts.`);
     }
     const newContact = {
       id: nanoid(),
@@ -95,6 +96,11 @@ class App extends Component {
 
         {/* test form */}
         <TestForm onAddContact={this.addContact} />
+        <Toaster
+          toastOptions={{
+            duration: 3000,
+          }}
+        />
       </Container>
     );
   }
