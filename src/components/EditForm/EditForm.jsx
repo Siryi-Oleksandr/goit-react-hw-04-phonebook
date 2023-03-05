@@ -23,7 +23,7 @@ let userValidSchema = object({
     .required(),
 });
 
-export const EditForm = ({ name, number, onEditContact, children }) => {
+function EditForm({ name, number, onEditContact, children }) {
   const handleSubmit = (values, { resetForm }) => {
     const { name, number } = values;
     onEditContact(name, number);
@@ -60,7 +60,7 @@ export const EditForm = ({ name, number, onEditContact, children }) => {
       </EditFormStyled>
     </Formik>
   );
-};
+}
 
 EditForm.propTypes = {
   name: PropTypes.string.isRequired,

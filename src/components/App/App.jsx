@@ -5,7 +5,6 @@ import { Container } from './App.styled';
 import ContactForm from 'components/ContactForm';
 import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
-import TestForm from 'components/TestForm/TestForm';
 import toast, { Toaster } from 'react-hot-toast';
 import useLocaleStorage from '../../hooks/useLocaleStorage';
 
@@ -18,7 +17,7 @@ function App() {
   const addContact = (newName, number) => {
     const isNotUnique = contacts.some(({ name }) => name === newName);
     if (isNotUnique) {
-      return toast.success(`${newName} is already in contacts.`);
+      return toast.success(`"${newName}" is already in contacts.`);
     }
     const newContact = {
       id: nanoid(),
@@ -69,15 +68,13 @@ function App() {
         onDeleteContact={deleteContact}
         onEditContact={editContact}
       />
-      <GlobalStyle />
 
-      {/* test form */}
-      <TestForm onAddContact={addContact} />
       <Toaster
         toastOptions={{
           duration: 3000,
         }}
       />
+      <GlobalStyle />
     </Container>
   );
 }
