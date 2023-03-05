@@ -1,8 +1,7 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { HiUser } from 'react-icons/hi';
 import { ImPhone } from 'react-icons/im';
-
 import {
   Item,
   ContactTel,
@@ -12,78 +11,65 @@ import {
 import { Controls, ControlsSave } from 'components/Control/Controls';
 import EditForm from 'components/EditForm';
 
-class ContactItem extends Component {
-  state = {
-    name: this.props.name,
-    number: this.props.number,
-    isEdit: false,
-  };
+function ContactItem({ name, number, id, onDeleteContact, onEditContact }) {
+  const [editName, setEditName] = useState(name);
+  const [editNumber, setEditNumber] = useState(number);
+  const [isEdit, setIsEdit] = useState(false);
 
-  handleEditContact = (name, number) => {
-    if (!this.state.isEdit) {
-      this.setState({ isEdit: true });
+  const handleEditContact = (newName, newNumber) => {
+    if (!isEdit) {
+      setIsEdit(true);
     } else {
-      this.setState({
-        name: name ? name : this.props.name,
-        number: number ? number : this.props.number,
-        isEdit: false,
-      });
+      setEditName(prevName => (newName ? newName : prevName));
+      setEditNumber(prevNumber => (newNumber ? newNumber : prevNumber));
+      setIsEdit(false);
 
-      this.props.onEditContact({
-        id: this.props.id,
-        name: name ? name : this.state.name,
-        number: number ? number : this.state.number,
+      onEditContact({
+        id: id,
+        name: newName ? newName : name,
+        number: newNumber ? newNumber : number,
       });
     }
   };
 
-  handleChange = evt => {
-    const { name, value } = evt.target;
-    this.setState({ [name]: value });
-  };
+  return (
+    <Item>
+      {/* if contact saved show contact info */}
 
-  render() {
-    const { id, onDeleteContact } = this.props;
-    const { isEdit, name, number } = this.state;
-    return (
-      <Item>
-        {/* if contact saved show contact info */}
+      {!isEdit && (
+        <ContactInfo>
+          <ContactName>
+            <HiUser />
+            {editName}:
+          </ContactName>
 
-        {!isEdit && (
-          <ContactInfo>
-            <ContactName>
-              <HiUser />
-              {name}:
-            </ContactName>
+          <ContactTel>
+            <ImPhone />
+            {editNumber}
+          </ContactTel>
+        </ContactInfo>
+      )}
 
-            <ContactTel>
-              <ImPhone />
-              {number}
-            </ContactTel>
-          </ContactInfo>
-        )}
+      {/* if contact is edit show edit form */}
+      {isEdit && (
+        <EditForm
+          name={editName}
+          number={editNumber}
+          onEditContact={handleEditContact}
+        >
+          <ControlsSave id={id} onDeleteContact={onDeleteContact} />
+        </EditForm>
+      )}
 
-        {/* if contact is edit show edit form */}
-        {isEdit && (
-          <EditForm
-            name={name}
-            number={number}
-            onEditContact={this.handleEditContact}
-          >
-            <ControlsSave id={id} onDeleteContact={onDeleteContact} />
-          </EditForm>
-        )}
-
-        {!isEdit && (
-          <Controls
-            id={id}
-            onDeleteContact={onDeleteContact}
-            onEditContact={this.handleEditContact}
-          />
-        )}
-      </Item>
-    );
-  }
+      {!isEdit && (
+        <Controls
+          id={id}
+          onDeleteContact={onDeleteContact}
+          onEditContact={handleEditContact}
+        />
+      )}
+    </Item>
+  );
 }
 
 ContactItem.propTypes = {
